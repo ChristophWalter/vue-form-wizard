@@ -306,6 +306,38 @@ describe('FormWizard.vue', () => {
       expect(wizardInstance.emitted()['on-complete'].length).to.equal(1)
     })
   })
+  describe('renders nested tab-content', () => {
+    beforeEach(() => {
+      threeStepWizard = {
+        template: `<form-wizard shape="tab">
+              <tab-content title="Personal details"
+                           
+                           icon="ti-user">
+                My first tab content
+              </tab-content>
+              <tab-content title="Additional Info"
+                           icon="ti-settings">
+                My second tab content
+              </tab-content>
+              <sub-component></sub-component>
+          </form-wizard>`
+      }
+    })
+    
+    it.only('simple nested tab', () => {
+      const wizard = mount(threeStepWizard, {localVue, stubs: {SubComponent: `<div><tab-content title="Last step"
+      icon="ti-settings">
+        My third tab content
+      </tab-content></div>`}})
+      console.log(wizard.html())
+      const tabs = wizard.findAll(WizardTab)
+      for (var i=0; i<tabs.length; i++) {
+        const tab = tabs.at(i)
+        console.log(tab.text())
+      }
+      expect(tabs.length).to.equal(3)
+    })
+  })
   describe('validation with', () => {
     beforeEach(() => {
       threeStepWizard = {
